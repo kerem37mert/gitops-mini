@@ -1,0 +1,8 @@
+.form-button {
+    padding: 0.7rem 1rem;
+    background-color: orangered;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}

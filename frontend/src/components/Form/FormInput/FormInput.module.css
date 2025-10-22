@@ -1,0 +1,8 @@
+.form-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5rem 0.6rem;
+    outline: none;
+    border: 1px solid black;
+    margin-bottom: 1rem;
+}

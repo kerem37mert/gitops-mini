@@ -3,6 +3,7 @@ import { useState } from "react";
 import FormButton from "../../components/Form/FormButton";
 import FormContainer from "../../components/Form/FormContainer";
 import FormInput from "../../components/Form/FormInput";
+import Message from "../../components/Message/Message";
 
 const NewApp = () => {
 
@@ -27,7 +28,7 @@ const NewApp = () => {
                 <FormButton text="Ekle" />
             </FormContainer>
 
-            <h2>{projectName}</h2>
+            <Message type="sccs" text="Hata oldu" />
         </>
     );
 }

@@ -1,0 +1,16 @@
+.message {
+    width: 600px;
+    background-color: red;
+    margin: 20px auto;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.err {
+    background-color: tomato;
+    color: #fff;
+}
+
+.sccs {
+    background-color: greenyellow;
+}

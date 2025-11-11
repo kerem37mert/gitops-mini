@@ -1,5 +1,11 @@
 import classes from "./Message.module.css";
 
+/**
+ * 
+ * type: err | sccs | any
+ * text: any 
+ *  
+ */
 const Message = ({ type, text }) => {
     return (
         <div 

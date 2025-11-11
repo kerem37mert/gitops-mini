@@ -4,6 +4,7 @@ import FormButton from "../../components/Form/FormButton";
 import FormContainer from "../../components/Form/FormContainer";
 import FormInput from "../../components/Form/FormInput";
 import Message from "../../components/Message/Message";
+import FormConstraint from "../../components/Form/FormConstraint";
 
 const NewApp = () => {
 
@@ -26,6 +27,7 @@ const NewApp = () => {
                 <FormInput placeholder="Github Repo URL" onChange={ changeRepoURL } />
                 <FormInput placeholder="Branch İsmi (master)" onChange={ changeBranchName } />
                 <FormButton text="Ekle" />
+                <FormConstraint text="* Github reposu public erişime sahip olmalıdır." />
             </FormContainer>
 
             <Message type="sccs" text="Hata oldu" />

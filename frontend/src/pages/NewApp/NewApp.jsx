@@ -10,11 +10,16 @@ const NewApp = () => {
 
     const [projectName, setProjectName] = useState("");
     const [repoURL, setRepoURL] = useState("");
+    const [repoPath, setRepoPath] = useState("");
     const [branchName, setBranchName] = useState("");
+    const [namespace, setNamespace] = useState("default");
+
 
     const changeProjectName = event => setProjectName(event.target.value);
     const changeRepoURL = event => setRepoURL(event.target.value);
+    const changeRepoPath = event => setRepoPath(event.target.value);
     const changeBranchName = event => setBranchName(event.target.value);
+    const changeNamespace = event => setNamespace(event.target.value);
 
     const submitHandler = (event) => {
         event.preventDefault();
@@ -23,9 +28,27 @@ const NewApp = () => {
     return (
         <>
             <FormContainer onSubmit={ submitHandler }>
-                <FormInput placeholder="Proje İsmi" onChange={ changeProjectName } />
-                <FormInput placeholder="Github Repo URL" onChange={ changeRepoURL } />
-                <FormInput placeholder="Branch İsmi (master)" onChange={ changeBranchName } />
+                <FormInput 
+                    placeholder="Proje İsmi" 
+                    onChange={ changeProjectName } 
+                />
+                <FormInput 
+                    placeholder="Github Repo URL" 
+                    onChange={ changeRepoURL } 
+                />
+                <FormInput 
+                    placeholder="Github Repo Yol (Manifest dosyalarının bulunduğu dizin)" 
+                    onChange={ changeRepoPath } 
+                />
+                <FormInput 
+                    placeholder="Branch İsmi (master)" 
+                    onChange={ changeBranchName } 
+                />
+                <FormInput 
+                    placeholder="Namespace" 
+                    defaultValue={ namespace }
+                    onChange={ changeNamespace } 
+                />
                 <FormButton text="Ekle" />
                 <FormConstraint text="* Github reposu public erişime sahip olmalıdır." />
             </FormContainer>

@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
-import newApp from "./newApp.js";
+import newApp from "./api/newApp.js";
+import { getApp, getApps } from "./api/apps.js";
 
 const app = express();
 
@@ -12,6 +13,10 @@ app.get("/", (req, res) => {
 });
 
 app.post("/api/newapp", newApp);
+
+app.get("/api/apps", getApps);
+
+app.get("/api/apps/:id", getApp);
 
 app.listen(3000, () => {
     console.log("Server is running on port 3000");

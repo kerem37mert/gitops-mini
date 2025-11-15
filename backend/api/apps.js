@@ -16,7 +16,7 @@ export const getApps = (req, res) => {
     }
 }
 
-// Id'ye göre tek bir uygulama getir.
+// Idye göre tek bir uygulama getir.
 export const getApp = (req, res) => {
     const id = req.params.id;
 

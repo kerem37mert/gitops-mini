@@ -5,6 +5,7 @@ import FormContainer from "../../components/Form/FormContainer";
 import FormInput from "../../components/Form/FormInput";
 import Message from "../../components/Message/Message";
 import FormConstraint from "../../components/Form/FormConstraint";
+import { useFetch } from "../../../hooks/useFetch";
 
 const NewApp = () => {
 
@@ -14,6 +15,18 @@ const NewApp = () => {
     const [branchName, setBranchName] = useState("");
     const [namespace, setNamespace] = useState("default");
 
+    const { 
+        isLoading, 
+        error, 
+        data, 
+        request 
+    } = useFetch("http://localhost:3000/api/newApp", "POST", false, {
+        projectName,
+        repoURL,
+        repoPath,
+        branchName,
+        namespace
+    });
 
     const changeProjectName = event => setProjectName(event.target.value);
     const changeRepoURL = event => setRepoURL(event.target.value);
@@ -23,6 +36,15 @@ const NewApp = () => {
 
     const submitHandler = (event) => {
         event.preventDefault();
+        request();
+
+        if(!error) {
+            setProjectName("");
+            setRepoURL("");
+            setRepoPath("");
+            setBranchName("");
+            setNamespace("default");
+        }
     }
 
     return (
@@ -30,30 +52,44 @@ const NewApp = () => {
             <FormContainer onSubmit={ submitHandler }>
                 <FormInput 
                     placeholder="Proje İsmi" 
+                    value={ projectName }
                     onChange={ changeProjectName } 
                 />
                 <FormInput 
                     placeholder="Github Repo URL" 
+                    value={ repoURL }
                     onChange={ changeRepoURL } 
                 />
                 <FormInput 
                     placeholder="Github Repo Yol (Manifest dosyalarının bulunduğu dizin)" 
+                    value={ repoPath }
                     onChange={ changeRepoPath } 
                 />
                 <FormInput 
                     placeholder="Branch İsmi (master)" 
+                    value={ branchName }
                     onChange={ changeBranchName } 
                 />
                 <FormInput 
                     placeholder="Namespace" 
-                    defaultValue={ namespace }
+                    value={ namespace }
                     onChange={ changeNamespace } 
                 />
                 <FormButton text="Ekle" />
                 <FormConstraint text="* Github reposu public erişime sahip olmalıdır." />
             </FormContainer>
 
-            <Message type="sccs" text="Hata oldu" />
+            {
+                error && (
+                    <Message type="err" text={ error } />
+                )
+            }
+
+            {
+                data?.status && (
+                    <Message type="sccs" text="Uygulama başarıyla eklendi." />
+                )
+            }
         </>
     );
 }

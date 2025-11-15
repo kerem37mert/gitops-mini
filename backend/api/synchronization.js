@@ -34,6 +34,7 @@ export const synchronization = async (req, res) => {
         const yamlFiles = files.filter(f => f.endsWith('.yaml') || f.endsWith('.yml'));
 
         const results = [];
+        const deployments = [];
 
         // tüm manifest dosyalarını uygula
         for(const file of yamlFiles) {
@@ -47,6 +48,13 @@ export const synchronization = async (req, res) => {
 
                 try {
                     const result = await applyManifest(manifest, app.namespace);
+
+                    if (manifest.kind === "Deployment")
+                        deployments.push({
+                            name: manifest.metadata.name,
+                            namespace: app.namespace
+                        });
+
                     results.push({
                         file,
                         kind: manifest.kind,
@@ -63,6 +71,15 @@ export const synchronization = async (req, res) => {
                         error: error.message
                     });
                 }
+            }
+        }
+
+        // deploymentsları yeniden başlat
+        for(const deployment of deployments){
+            try {
+                await restartDeployment(deployment.name, deployment.namespace);
+            } catch(error) {
+                console.error(`Deployment yeniden başlatma hatası: ${deployment.name}`, error.message);
             }
         }
 
@@ -160,6 +177,35 @@ const applyService = async (manifest, namespace) => {
                 namespace,
                 body: manifest
             });
+        throw error;
+    }
+}
+
+// Deploymentı yeniden balatma fonku
+const restartDeployment = async (name, namespace) => {
+    try {
+        // Mevcut deploymento oku
+        const { body: deployment } = await k8sAppsApi.readNamespacedDeployment({
+            name,
+            namespace
+        });
+
+        if (!deployment.spec.template.metadata)
+            deployment.spec.template.metadata = {};
+
+        if (!deployment.spec.template.metadata.annotations)
+            deployment.spec.template.metadata.annotations = {};
+        
+        deployment.spec.template.metadata.annotations['kubectl.kubernetes.io/restartedAt'] = new Date().toISOString();
+
+        // Deploymentı güncelle
+        return await k8sAppsApi.replaceNamespacedDeployment({
+            name: name,
+            namespace: namespace,
+            body: deployment
+        });
+    } catch(error) {
+        console.error(`yenşden başlatma hatası: ${name}`, error.message);
         throw error;
     }
 }

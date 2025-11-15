@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import Body from "./components/Body";
 import Home from "./pages/Home";
 import NewApp from "./pages/NewApp";
+import Apps from "./pages/Apps";
 
 const Router = () => {
     return (
@@ -12,6 +13,7 @@ const Router = () => {
                 <Routes>
                     <Route index element={ <Home /> } />
                     <Route path="/newapp" element={ <NewApp /> } /> 
+                    <Route path="/apps" element={ <Apps /> } />
                 </Routes>
             </Body>
         </BrowserRouter>

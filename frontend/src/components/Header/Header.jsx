@@ -14,7 +14,7 @@ const Header = () => {
                         <Link to="/newapp">Yeni Proje</Link>
                     </li>
                     <li>
-                        <a href="">Uygulamalar</a>
+                        <Link to="/apps">Uygulamalar</Link>
                     </li>
                 </ul>
             </nav>

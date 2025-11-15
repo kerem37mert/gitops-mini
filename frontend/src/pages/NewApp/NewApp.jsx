@@ -81,7 +81,7 @@ const NewApp = () => {
 
             {
                 error && (
-                    <Message type="err" text={ error } />
+                    <Message type="err" text={ `Hata: ${ error }` } />
                 )
             }
 

@@ -1,28 +1,37 @@
 import { useFetch } from "../../../hooks/useFetch";
 import AppCard from "../../components/AppCard/AppCard";
+import { AppCardContainer } from "../../components/AppCard";
 
 const Apps = () => {
-
     const { 
-            isLoading, 
-            error, 
-            data, 
-            request 
-        } = useFetch("http://localhost:3000/api/apsps", "GET", true);
+        isLoading, 
+        error, 
+        data, 
+        request 
+    } = useFetch("http://localhost:3000/api/apps", "GET", true);
+
+    if(isLoading) {
+        return <p>yükleniyor...</p>;
+    }
+
+    if(error) {
+        return <p>{error}</p>;
+    }
+
+    console.log("data:", data);
+
     return (
-        <>
-            { 
-                isLoading && (
-                    <p>yükleniyor...</p>
+        <AppCardContainer>
+            {
+                !data?.message || data.message.length === 0 ? (
+                    <p>Henüz hiç uygulaman yok</p>
+                ) : (
+                    data?.message?.map(item => (
+                        <AppCard key={item.id} data={item} />
+                    ))
                 )
             }
-
-            {
-                error && (
-                    <p>{ error }</p>
-                )   
-            }
-        </>
+        </AppCardContainer>
     );
 }
 

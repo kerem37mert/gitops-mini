@@ -27,6 +27,7 @@ export const useFetch = (url, method, isInitialCall=false, body=null) => {
             if(!response.ok) 
                 throw new Error("Sunucuda bir hata oluştu");
 
+            const data = await response.json();
             setData(data);
             
         } catch(err) {

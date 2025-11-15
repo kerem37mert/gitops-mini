@@ -1,4 +1,4 @@
-const AppCard = () => {
+const AppCard = ({ data }) => {
     return (
         <div>
             AppCard

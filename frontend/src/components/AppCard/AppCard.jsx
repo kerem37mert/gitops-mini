@@ -4,7 +4,7 @@ import { FaSyncAlt } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import { useFetch } from "../../../hooks/useFetch";
 
-const AppCard = ({ data }) => {
+const AppCard = ({ data, refresh }) => {
 
     // for sync
     const { 
@@ -24,6 +24,11 @@ const AppCard = ({ data }) => {
 
     const syncHandler = (id) => {
         syncRequest(`http://localhost:3000/api/apps/${id}/sync`);
+    }
+
+    const removeHandler = async (id) => {
+        await removeRequest(`http://localhost:3000/api/apps/${id}/remove`);
+        refresh();
     }
 
     return (
@@ -60,7 +65,9 @@ const AppCard = ({ data }) => {
                     <span>SYNC</span>
                 </button>
                 <button
+                    disabled={ removeIsLoading ? true : false } 
                     className={ `${classes["btn-footer"]} ${classes["btn-cancel"]}` }
+                    onClick={ () => removeHandler(data.id) }
                 >
                     <MdCancel className={ classes["cancel-icon"] } />
                 </button>

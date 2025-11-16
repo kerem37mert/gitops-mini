@@ -15,10 +15,8 @@ const Apps = () => {
     }
 
     if(error) {
-        return <p>{error}</p>;
+        return <p>{ error }</p>;
     }
-
-    console.log("data:", data);
 
     return (
         <AppCardContainer>
@@ -27,7 +25,7 @@ const Apps = () => {
                     <p>Henüz hiç uygulaman yok</p>
                 ) : (
                     data?.message?.map(item => (
-                        <AppCard key={item.id} data={item} />
+                        <AppCard key={ item.id}  data={ item } />
                     ))
                 )
             }

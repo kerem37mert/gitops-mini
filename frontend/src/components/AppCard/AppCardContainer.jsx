@@ -1,6 +1,8 @@
+import classes from "./AppCard.module.css"
+
 const AppCardContainer = ({ children }) => {
     return (
-        <div>
+        <div className={ classes["app-card-container"] }>
             { children }
         </div>
     );

@@ -1,11 +1,19 @@
 import classes from "./AppCard.module.css";
 import { FaGitAlt } from "react-icons/fa6";
 import { FaSyncAlt } from "react-icons/fa";
+import { useFetch } from "../../../hooks/useFetch";
 
 const AppCard = ({ data }) => {
 
+    const { 
+            isLoading: syncIsLoading, 
+            error: syncError, 
+            data: syncData, 
+            request: syncRequest
+        } = useFetch(`http://localhost:3000/api/apps/`, "GET", false);
+
     const syncHandler = (id) => {
-        alert(id)
+        syncRequest(`http://localhost:3000/api/apps/${id}/sync`);
     }
 
     return (
@@ -31,11 +39,14 @@ const AppCard = ({ data }) => {
                 </div>
             </div>
             <div className={ classes.footer }>
-                <button 
+                <button
+                    disabled={ syncIsLoading ? true : false } 
                     className={ classes["btn-sync"] } 
                     onClick={ () => syncHandler(data.id) }
                 >
-                    <FaSyncAlt className={ classes["sync-icon"] } />
+                    <FaSyncAlt 
+                        className={ `${classes["sync-icon"]} ${syncIsLoading && classes.spin}` } 
+                    />
                     <span>SYNC</span>
                 </button>
             </div>

@@ -6,7 +6,7 @@ export const useFetch = (url, method, isInitialCall=false, body=null) => {
     const [data, setData]= useState({});
     
 
-    const request = async () => {
+    const request = async (customUrl = url) => {
 
         setIsLoading(true);
         setError(undefined)
@@ -22,7 +22,7 @@ export const useFetch = (url, method, isInitialCall=false, body=null) => {
             options.body = JSON.stringify(body);
 
         try {
-            const response = await fetch(url, options);
+            const response = await fetch(customUrl, options);
 
             if(!response.ok) 
                 throw new Error("Sunucuda bir hata oluştu");

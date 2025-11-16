@@ -10,6 +10,8 @@ db.prepare(`
     repoPath TEXT,
     branchName TEXT,
     namespace TEXT
+    lastSync TEXT,
+    createdAt TEXT
   )
 `).run();
 

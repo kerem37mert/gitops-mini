@@ -4,12 +4,16 @@ import Body from "./components/Body";
 import Home from "./pages/Home";
 import NewApp from "./pages/NewApp";
 import Apps from "./pages/Apps";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Router = () => {
+
     return (
         <BrowserRouter>
             <Header />
             <Body>
+                <ToastContainer />
                 <Routes>
                     <Route index element={ <Home /> } />
                     <Route path="/newapp" element={ <NewApp /> } /> 

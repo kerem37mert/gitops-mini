@@ -3,6 +3,8 @@ import { FaGitAlt } from "react-icons/fa6";
 import { FaSyncAlt } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import { useFetch } from "../../../hooks/useFetch";
+import { toast } from "react-toastify";
+import formatDate from "../../../helpers/formatDate";
 
 const AppCard = ({ data, refresh }) => {
 
@@ -29,6 +31,7 @@ const AppCard = ({ data, refresh }) => {
     const removeHandler = async (id) => {
         await removeRequest(`http://localhost:3000/api/apps/${id}/remove`);
         refresh();
+        toast.success(`${id} id'li uygulama başarıyla kaldırıldı`);
     }
 
     return (
@@ -44,6 +47,8 @@ const AppCard = ({ data, refresh }) => {
                     <p>Yol:</p>
                     <p>Branch İsmi:</p>
                     <p>Namespace: </p>
+                    <p>Oluşturulma Tarihi: </p>
+                    <p>Son Senkronizasyon</p>
                 </div>
                 <div className={ classes.values }>
                     <p>{ data.projectName }</p>
@@ -51,6 +56,10 @@ const AppCard = ({ data, refresh }) => {
                     <p>{ data.repoPath }</p>
                     <p>{ data.branchName }</p>
                     <p>{ data.namespace }</p>
+                    <p>{ formatDate(data.createdAt) }</p>
+                    <p>
+                        { data.lastSync ? formatDate(data.lastSync) : formatDate(data.createdAt) }
+                    </p>
                 </div>
             </div>
             <div className={ classes.footer }>

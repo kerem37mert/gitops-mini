@@ -21,15 +21,19 @@ const newApp = (req, res) => {
         repoURL,
         repoPath: repoPath || "./",
         branchName: branchName || "main",
-        namespace: namespace || "default"
+        namespace: namespace || "default",
+        lastSync: null,
+        createdAt: new Date().toISOString()
     };
+
+    console.log(app.createdAt);
     
     // veriler database'e kaydediliyor.
     try {
         const stmt = db.prepare(
-            "INSERT INTO apps (projectName, repoURL, repoPath, branchName, namespace) VALUES (?, ?, ?, ?, ?)"
+            "INSERT INTO apps (projectName, repoURL, repoPath, branchName, namespace, lastSync, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
         ); 
-        stmt.run(app.projectName, app.repoURL, app.repoPath, app.branchName, app.namespace);
+        stmt.run(app.projectName, app.repoURL, app.repoPath, app.branchName, app.namespace, app.lastSync, app.createdAt);
 
         res.json({
             status: true,

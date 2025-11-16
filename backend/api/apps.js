@@ -16,7 +16,7 @@ export const getApps = (req, res) => {
     }
 }
 
-// Idye göre tek bir uygulama getir.
+// Id'ye göre tek bir uygulama getir.
 export const getApp = (req, res) => {
     const id = req.params.id;
 
@@ -33,9 +33,28 @@ export const getApp = (req, res) => {
             message: app
         })
     } catch(error) {
-        res.json({
+        res.status(500).json({
             message: error.message
         });
         console.log(error);
+    }
+}
+
+// Id'ye göre uygulamayı sil
+export const removeApp = (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const stmt = db.prepare("DELETE FROM apps WHERE id=?");
+        stmt.run(id);
+
+        res.json({
+            status: true,
+            message: id
+        })
+    } catch(error) {
+        res.status(500).json({
+            message: error.message,
+        })
     }
 }

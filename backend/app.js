@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import newApp from "./api/newApp.js";
-import { getApp, getApps } from "./api/apps.js";
+import { getApp, getApps, removeApp } from "./api/apps.js";
 import { synchronization } from "./api/synchronization.js";
 
 const app = express();
@@ -18,6 +18,8 @@ app.post("/api/newapp", newApp);
 app.get("/api/apps", getApps);
 
 app.get("/api/apps/:id", getApp);
+
+app.get("/api/apps/:id/remove", removeApp);
 
 // daha sonra post yapcam
 app.get("/api/apps/:id/sync", synchronization)

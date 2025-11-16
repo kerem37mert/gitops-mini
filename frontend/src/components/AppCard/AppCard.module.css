@@ -42,9 +42,10 @@
 
 .footer {
     margin-top: 10px;
+    display: flex;
 }
 
-.btn-sync {
+.btn-footer {
     padding: 10px;
     border-radius: 10px;
     border: none;
@@ -56,12 +57,21 @@
     font-weight: 600;
 }
 
-.btn-sync:hover {
+.btn-footer:hover {
     background-color: darkgray;
+}
+
+.btn-cancel {
+    margin-left: 10px;
+    padding: 10px 15px;
 }
 
 .sync-icon {
     margin-right: 7px;
+}
+
+.cancel-icon {
+   
 }
 
 .spin {

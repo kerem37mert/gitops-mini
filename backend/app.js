@@ -22,8 +22,8 @@ app.get("/api/apps/:id", getApp);
 app.get("/api/apps/:id/remove", removeApp);
 
 // daha sonra post yapcam
-app.get("/api/apps/:id/sync", synchronization)
+app.get("/api/apps/:id/sync", synchronization);
 
-app.listen(3000, () => {
-    console.log("Server is running on port 3000");
+app.listen(3000, '0.0.0.0', () => {
+  console.log('Server is running on port 3000');
 });

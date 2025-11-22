@@ -8,13 +8,15 @@ import formatDate from "../../../helpers/formatDate";
 
 const AppCard = ({ data }) => {
 
+    const API_URL = import.meta.env.VITE_API_URL;
+
     // for sync
     const { 
         isLoading: syncIsLoading, 
         error: syncError, 
         data: syncData, 
         request: syncRequest
-    } = useFetch(`http://localhost:5174/api/apps/`, "GET", false);
+    } = useFetch(`${API_URL}/api/apps/`, "GET", false);
 
     // for remove app
     const {
@@ -22,17 +24,17 @@ const AppCard = ({ data }) => {
         error: removeError,
         data: removeData,
         request: removeRequest
-    } = useFetch(`http://localhost:5174/api/`, "GET", false);
+    } = useFetch(`${API_URL}/api/`, "GET", false);
 
     const syncHandler = async (id) => {
-        await syncRequest(`http://localhost:5174/api/apps/${id}/sync`);
+        await syncRequest(`${API_URL}/api/apps/${id}/sync`);
 
         if(syncError)
             toast.error(syncError);    
     }
 
     const removeHandler = async (id) => {
-        await removeRequest(`http://localhost:5174/api/apps/${id}/remove`);
+        await removeRequest(`${API_URL}/api/apps/${id}/remove`);
 
         if(!removeError)
             toast.success(`${id} id'li uygulama başarıyla kaldırıldı`);

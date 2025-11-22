@@ -25,5 +25,5 @@ app.get("/api/apps/:id/remove", removeApp);
 app.get("/api/apps/:id/sync", synchronization);
 
 app.listen(5174, () => {
-  console.log('Server is running on port 3000');
+  console.log('Server is running on port 5174');
 });

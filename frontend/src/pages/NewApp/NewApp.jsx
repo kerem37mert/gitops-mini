@@ -9,6 +9,8 @@ import { useFetch } from "../../../hooks/useFetch";
 
 const NewApp = () => {
 
+    const API_URL = import.meta.env.VITE_API_URL;
+
     const [projectName, setProjectName] = useState("");
     const [repoURL, setRepoURL] = useState("");
     const [repoPath, setRepoPath] = useState("");
@@ -20,7 +22,7 @@ const NewApp = () => {
         error, 
         data, 
         request 
-    } = useFetch("http://localhost:5174/api/newApp", "POST", false, {
+    } = useFetch(`${API_URL}/api/newApp`, "POST", false, {
         projectName,
         repoURL,
         repoPath,

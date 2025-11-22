@@ -3,12 +3,15 @@ import AppCard from "../../components/AppCard/AppCard";
 import { AppCardContainer } from "../../components/AppCard";
 
 const Apps = () => {
+
+    const API_URL = import.meta.env.VITE_API_URL;
+
     const { 
         isLoading, 
         error, 
         data, 
         request 
-    } = useFetch("http://localhost:5174/api/apps", "GET", true);
+    } = useFetch(`${API_URL}/api/apps`, "GET", true);
 
     if(isLoading) {
         return <p>yükleniyor...</p>;

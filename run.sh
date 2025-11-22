@@ -1,4 +1,4 @@
 cd frontend
-npm run dev &
+pm run dev -- --host &
 cd ../backend
-node app.js
+node app.js &

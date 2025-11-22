@@ -23,7 +23,13 @@ export const synchronization = async (req, res) => {
 
         // repoyu clonela
         const git = simpleGit();
-        await git.clone(app.repoURL, repoDir, ['--branch', app.branchName, '--depth', '1']);
+        try {
+            await git.clone(app.repoURL, repoDir, ['--branch', app.branchName, '--depth', '1']);
+        } catch(error) {
+            return res.status(500).json({
+                message: error.message
+            });
+        }
 
         // mainefest dosyalarının bulundupu yolu elde et
         const manifestsDir = path.join(repoDir, app.repoPath); 
@@ -82,6 +88,14 @@ export const synchronization = async (req, res) => {
                 console.error(`Deployment yeniden başlatma hatası: ${deployment.name}`, error.message);
             }
         }
+
+        try {
+            const stmt = db.prepare("UPDATE apps SET lastSync=? WHERE id=?");
+            stmt.run(new Date().toISOString(), id);
+        } catch (error) {
+            throw error;
+        }
+
 
         res.json({
             status: true,

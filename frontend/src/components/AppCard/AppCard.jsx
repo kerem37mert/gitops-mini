@@ -14,7 +14,7 @@ const AppCard = ({ data }) => {
         error: syncError, 
         data: syncData, 
         request: syncRequest
-    } = useFetch(`http://localhost:3000/api/apps/`, "GET", false);
+    } = useFetch(`http://localhost:5174/api/apps/`, "GET", false);
 
     // for remove app
     const {
@@ -22,17 +22,17 @@ const AppCard = ({ data }) => {
         error: removeError,
         data: removeData,
         request: removeRequest
-    } = useFetch(`http://localhost:3000/api//`, "GET", false);
+    } = useFetch(`http://localhost:5174/api/`, "GET", false);
 
     const syncHandler = async (id) => {
-        await syncRequest(`http://localhost:3000/api/apps/${id}/sync`);
+        await syncRequest(`http://localhost:5174/api/apps/${id}/sync`);
 
         if(syncError)
             toast.error(syncError);    
     }
 
     const removeHandler = async (id) => {
-        await removeRequest(`http://localhost:3000/api/apps/${id}/remove`);
+        await removeRequest(`http://localhost:5174/api/apps/${id}/remove`);
 
         if(!removeError)
             toast.success(`${id} id'li uygulama başarıyla kaldırıldı`);

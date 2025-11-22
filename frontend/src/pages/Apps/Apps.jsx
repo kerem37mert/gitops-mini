@@ -8,7 +8,7 @@ const Apps = () => {
         error, 
         data, 
         request 
-    } = useFetch("http://localhost:3000/api/apps", "GET", true);
+    } = useFetch("http://localhost:5174/api/apps", "GET", true);
 
     if(isLoading) {
         return <p>yükleniyor...</p>;

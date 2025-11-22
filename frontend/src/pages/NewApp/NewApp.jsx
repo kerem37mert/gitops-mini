@@ -20,7 +20,7 @@ const NewApp = () => {
         error, 
         data, 
         request 
-    } = useFetch("http://localhost:3000/api/newApp", "POST", false, {
+    } = useFetch("http://localhost:5174/api/newApp", "POST", false, {
         projectName,
         repoURL,
         repoPath,

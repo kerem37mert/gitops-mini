@@ -6,15 +6,15 @@ import { useFetch } from "../../../hooks/useFetch";
 import { toast } from "react-toastify";
 import formatDate from "../../../helpers/formatDate";
 
-const AppCard = ({ data, refresh }) => {
+const AppCard = ({ data }) => {
 
     // for sync
     const { 
-            isLoading: syncIsLoading, 
-            error: syncError, 
-            data: syncData, 
-            request: syncRequest
-        } = useFetch(`http://localhost:3000/api/apps/`, "GET", false);
+        isLoading: syncIsLoading, 
+        error: syncError, 
+        data: syncData, 
+        request: syncRequest
+    } = useFetch(`http://localhost:3000/api/apps/`, "GET", false);
 
     // for remove app
     const {
@@ -22,20 +22,24 @@ const AppCard = ({ data, refresh }) => {
         error: removeError,
         data: removeData,
         request: removeRequest
-    } = useFetch(`http://localhost:3000/api/apps/`, "GET", false);
+    } = useFetch(`http://localhost:3000/api//`, "GET", false);
 
-    const syncHandler = (id) => {
-        syncRequest(`http://localhost:3000/api/apps/${id}/sync`);
+    const syncHandler = async (id) => {
+        await syncRequest(`http://localhost:3000/api/apps/${id}/sync`);
+
+        if(syncError)
+            toast.error(syncError);    
     }
 
     const removeHandler = async (id) => {
         await removeRequest(`http://localhost:3000/api/apps/${id}/remove`);
-        refresh();
-        toast.success(`${id} id'li uygulama başarıyla kaldırıldı`);
+
+        if(!removeError)
+            toast.success(`${id} id'li uygulama başarıyla kaldırıldı`);
     }
 
     return (
-        <div className={ classes["app-card"] }>
+        <div className={ classes["app-card"] }> 
             <div className={ classes.header }>
                 <FaGitAlt className={ classes["git-icon"] } />
                 <p className={ classes.title }>{ data.projectName }</p>

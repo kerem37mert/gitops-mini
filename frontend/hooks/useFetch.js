@@ -2,14 +2,14 @@ import { useEffect, useState } from "react"
 
 export const useFetch = (url, method, isInitialCall=false, body=null) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(undefined);
-    const [data, setData]= useState({});
+    const [error, setError] = useState(null);
+    const [data, setData]= useState(null);
     
 
     const request = async (customUrl = url) => {
 
         setIsLoading(true);
-        setError(undefined)
+        setError(null)
 
         const options = {
             method,
@@ -23,12 +23,12 @@ export const useFetch = (url, method, isInitialCall=false, body=null) => {
 
         try {
             const response = await fetch(customUrl, options);
+            const responseData = await response.json();
 
             if(!response.ok) 
-                throw new Error("Sunucuda bir hata oluştu");
+                throw new Error(responseData?.message || "Sunucuda bir hata oluştu");
 
-            const data = await response.json();
-            setData(data);
+            setData(responseData);
             
         } catch(err) {
             setError(err.message);

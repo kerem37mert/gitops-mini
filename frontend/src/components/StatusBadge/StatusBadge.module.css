@@ -1,0 +1,40 @@
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.small {
+    padding: 0.25rem 0.625rem;
+    font-size: 0.7rem;
+}
+
+.medium {
+    padding: 0.375rem 0.875rem;
+    font-size: 0.8rem;
+}
+
+/* Status colors */
+.active {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.failed {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.pending {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.success {
+    background-color: #d1fae5;
+    color: #065f46;
+}

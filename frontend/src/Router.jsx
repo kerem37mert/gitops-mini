@@ -4,6 +4,7 @@ import Body from "./components/Body";
 import Home from "./pages/Home";
 import NewApp from "./pages/NewApp";
 import Apps from "./pages/Apps";
+import AppDetail from "./pages/AppDetail";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -15,9 +16,10 @@ const Router = () => {
             <Body>
                 <ToastContainer />
                 <Routes>
-                    <Route index element={ <Home /> } />
-                    <Route path="/newapp" element={ <NewApp /> } /> 
-                    <Route path="/apps" element={ <Apps /> } />
+                    <Route index element={<Home />} />
+                    <Route path="/newapp" element={<NewApp />} />
+                    <Route path="/apps" element={<Apps />} />
+                    <Route path="/apps/:id" element={<AppDetail />} />
                 </Routes>
             </Body>
         </BrowserRouter>

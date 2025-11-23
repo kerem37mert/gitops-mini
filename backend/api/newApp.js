@@ -26,7 +26,7 @@ const newApp = (req, res) => {
         namespace: namespace || "default",
         description: description || null,
         autoSync: autoSync ? 1 : 0,
-        status: 'active',
+        status: 'pending',
         syncStatus: 'pending',
         errorMessage: null,
         syncCount: 0,

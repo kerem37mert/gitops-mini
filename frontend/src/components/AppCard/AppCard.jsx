@@ -1,10 +1,12 @@
+import { Link } from "react-router";
 import classes from "./AppCard.module.css";
 import { FaGitAlt } from "react-icons/fa6";
-import { FaSyncAlt } from "react-icons/fa";
+import { FaSyncAlt, FaInfoCircle } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import { useFetch } from "../../../hooks/useFetch";
 import { toast } from "react-toastify";
 import formatDate from "../../../helpers/formatDate";
+import StatusBadge from "../StatusBadge";
 
 const AppCard = ({ data, onUpdate }) => {
 
@@ -58,32 +60,32 @@ const AppCard = ({ data, onUpdate }) => {
         }
     }
 
+    // Durum bazlı class
+    const getStatusClass = () => {
+        const status = data.status || 'pending';
+        return classes[`status-${status}`];
+    };
+
     return (
-        <div className={classes["app-card"]}>
+        <div className={`${classes["app-card"]} ${getStatusClass()}`}>
             <div className={classes.header}>
                 <FaGitAlt className={classes["git-icon"]} />
                 <p className={classes.title}>{data.projectName}</p>
             </div>
             <div className={classes.body}>
                 <div className={classes.labels}>
-                    <p>Proje İsmi:</p>
                     <p>Repository:</p>
-                    <p>Yol:</p>
-                    <p>Branch İsmi:</p>
-                    <p>Namespace: </p>
-                    <p>Oluşturulma Tarihi: </p>
-                    <p>Son Senkronizasyon</p>
+                    <p>Branch:</p>
+                    <p>Namespace:</p>
+                    <p>Sync Sayısı:</p>
+                    <p>Son Senkronizasyon:</p>
                 </div>
                 <div className={classes.values}>
-                    <p>{data.projectName}</p>
-                    <p>{data.repoURL}</p>
-                    <p>{data.repoPath}</p>
+                    <p className={classes.truncate}>{data.repoURL}</p>
                     <p>{data.branchName}</p>
                     <p>{data.namespace}</p>
-                    <p>{formatDate(data.createdAt)}</p>
-                    <p>
-                        {data.lastSync ? formatDate(data.lastSync) : formatDate(data.createdAt)}
-                    </p>
+                    <p>{data.syncCount || 0} kez</p>
+                    <p>{data.lastSync ? formatDate(data.lastSync) : 'Henüz yok'}</p>
                 </div>
             </div>
             <div className={classes.footer}>
@@ -104,6 +106,13 @@ const AppCard = ({ data, onUpdate }) => {
                 >
                     <MdCancel className={classes["cancel-icon"]} />
                 </button>
+                <Link
+                    to={`/apps/${data.id}`}
+                    className={`${classes["btn-footer"]} ${classes["btn-detail"]}`}
+                >
+                    <FaInfoCircle className={classes["detail-icon"]} />
+                    <span>Detay</span>
+                </Link>
             </div>
         </div>
     );

@@ -11,15 +11,30 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     border-left: 5px solid var(--primary);
+    transition: border-color 0.3s ease;
+}
+
+/* Status-based border colors */
+.status-active {
+    border-left-color: var(--success);
+}
+
+.status-failed {
+    border-left-color: var(--error);
+}
+
+.status-pending {
+    border-left-color: #f59e0b;
 }
 
 .header {
     display: flex;
     align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .title {
-    margin-left: 10px;
     font-weight: 600;
 }
 
@@ -41,9 +56,16 @@
     flex: 3;
 }
 
+.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .footer {
     margin-top: 10px;
     display: flex;
+    gap: 0.5rem;
 }
 
 .btn-footer {
@@ -53,10 +75,12 @@
     background-color: var(--gray);
     display: flex;
     align-items: center;
+    gap: 0.5rem;
     color: #fff;
     cursor: pointer;
     font-weight: 600;
     transition: background-color 0.2s;
+    text-decoration: none;
 }
 
 .btn-footer:hover {
@@ -64,15 +88,23 @@
 }
 
 .btn-cancel {
-    margin-left: 10px;
     padding: 10px 15px;
 }
 
-.sync-icon {
-    margin-right: 7px;
+.btn-detail {
+    background-color: var(--primary);
 }
 
-.cancel-icon {}
+.btn-detail:hover {
+    background-color: var(--primary-dark);
+}
+
+.sync-icon {
+    margin-right: 0;
+}
+
+.cancel-icon,
+.detail-icon {}
 
 .spin {
     animation: spin 2s linear infinite;

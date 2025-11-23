@@ -2,6 +2,7 @@ import * as k8s from "@kubernetes/client-node";
 import path from "path";
 import fs from "fs-extra";
 import { fileURLToPath } from "url";
+import os from "os";
 
 
 // Kubernetes API’sine bağlanmak ve işlemler yapmak için
@@ -10,20 +11,22 @@ export const kubernetesClient = new k8s.KubeConfig();
 
 // Minikube configi otomatik olarak yükler
 // kubernetesClient.loadFromDefault();
-const kubeConfigPath = path.join(process.env.HOME, '.kube', 'config');
-console.log(`[DEBUG] Trying to load kubeconfig from: ${kubeConfigPath}`);
-console.log(`[DEBUG] File exists: ${fs.existsSync(kubeConfigPath)}`);
+export const homeDir = os.userInfo().homedir;
+let kubeConfigPath = path.join(homeDir, '.kube', 'config');
+const k3sConfigPath = '/etc/rancher/k3s/k3s.yaml';
+
+console.log(`[DEBUG] Detected Home Dir: ${homeDir}`);
 
 if (fs.existsSync(kubeConfigPath)) {
+    console.log(`[DEBUG] Loading kubeconfig from: ${kubeConfigPath}`);
     kubernetesClient.loadFromFile(kubeConfigPath);
-    console.log("[DEBUG] Loaded from file.");
+} else if (fs.existsSync(k3sConfigPath)) {
+    console.log(`[DEBUG] Loading kubeconfig from K3s: ${k3sConfigPath}`);
+    kubernetesClient.loadFromFile(k3sConfigPath);
 } else {
+    console.log("[DEBUG] Config file not found in home or K3s path. Loading from default.");
     kubernetesClient.loadFromDefault();
-    console.log("[DEBUG] Loaded from default.");
 }
-
-console.log(`[DEBUG] Current Context: ${kubernetesClient.currentContext}`);
-console.log(`[DEBUG] Clusters: ${JSON.stringify(kubernetesClient.clusters.map(c => ({ name: c.name, server: c.server })))}`);
 
 // HTTP kullanan clusterlar için skipTLSVerify ayarını true yap
 for (const cluster of kubernetesClient.clusters) {

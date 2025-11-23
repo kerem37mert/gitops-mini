@@ -15,7 +15,8 @@ const AppDetail = () => {
     const {
         isLoading,
         error,
-        data
+        data,
+        request
     } = useFetch(`${API_URL}/api/apps/${id}`, "GET", true);
 
     const {
@@ -32,9 +33,12 @@ const AppDetail = () => {
         try {
             await syncRequest(`${API_URL}/api/apps/${id}/sync`);
             toast.success("Senkronizasyon başarılı");
-            window.location.reload();
+            // Refetch data instead of reloading
+            await request();
         } catch (err) {
             toast.error(`Hata: ${err.message || err}`);
+            // Refetch to show error status
+            await request();
         }
     };
 
@@ -110,7 +114,7 @@ const AppDetail = () => {
                 </div>
 
                 <div className={classes.card}>
-                    <h2>Senkronizasyon Metrikleri</h2>
+                    <h2>Senkronizasyon Bİlgileri</h2>
                     <div className={classes.info}>
                         <div className={classes.row}>
                             <span className={classes.label}>Durum:</span>
@@ -137,7 +141,7 @@ const AppDetail = () => {
                         <div className={classes.row}>
                             <span className={classes.label}>Otomatik Sync:</span>
                             <span className={classes.value}>
-                                {app.autoSync ? '✓ Aktif' : '✗ Pasif'}
+                                {app.autoSync ? 'Aktif' : 'Pasif'}
                             </span>
                         </div>
                     </div>

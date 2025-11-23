@@ -4,7 +4,7 @@ const StatusBadge = ({ status, size = "small" }) => {
     const getStatusText = () => {
         switch (status) {
             case 'active':
-                return 'Aktif';
+                return 'Başarılı';
             case 'failed':
                 return 'Hatalı';
             case 'pending':

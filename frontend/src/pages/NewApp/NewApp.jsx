@@ -3,6 +3,7 @@ import { useState } from "react";
 import FormButton from "../../components/Form/FormButton";
 import FormContainer from "../../components/Form/FormContainer";
 import FormInput from "../../components/Form/FormInput";
+import FormSelect from "../../components/Form/FormSelect";
 import FormTextarea from "../../components/Form/FormTextarea";
 import FormCheckbox from "../../components/Form/FormCheckbox";
 import Message from "../../components/Message/Message";
@@ -20,6 +21,12 @@ const NewApp = () => {
     const [description, setDescription] = useState("");
     const [autoSync, setAutoSync] = useState(false);
 
+    // Repo validation states
+    const [isValidatingRepo, setIsValidatingRepo] = useState(false);
+    const [repoValid, setRepoValid] = useState(false);
+    const [repoError, setRepoError] = useState(null);
+    const [branches, setBranches] = useState([]);
+
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
@@ -31,6 +38,63 @@ const NewApp = () => {
     const changeNamespace = event => setNamespace(event.target.value);
     const changeDescription = event => setDescription(event.target.value);
     const changeAutoSync = event => setAutoSync(event.target.checked);
+
+    // Validate repo when URL input loses focus
+    const handleRepoBlur = async () => {
+        if (!repoURL || repoURL.trim() === "") {
+            setRepoValid(false);
+            setRepoError(null);
+            setBranches([]);
+            return;
+        }
+
+        setIsValidatingRepo(true);
+        setRepoError(null);
+        setRepoValid(false);
+        setBranches([]);
+
+        try {
+            // Validate repo
+            const validateResponse = await fetch(`${API_URL}/api/github/validate`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ repoURL })
+            });
+
+            const validateData = await validateResponse.json();
+
+            if (!validateResponse.ok) {
+                throw new Error(validateData.message);
+            }
+
+            if (validateData.isPrivate) {
+                throw new Error("Private repository'ler desteklenmiyor");
+            }
+
+            // Fetch branches
+            const branchesResponse = await fetch(`${API_URL}/api/github/branches`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ repoURL })
+            });
+
+            const branchesData = await branchesResponse.json();
+
+            if (!branchesResponse.ok) {
+                throw new Error(branchesData.message);
+            }
+
+            setBranches(branchesData.branches);
+            setBranchName(validateData.defaultBranch || branchesData.branches[0] || "");
+            setRepoValid(true);
+        } catch (err) {
+            setRepoError(err.message);
+            setRepoValid(false);
+            setBranches([]);
+        } finally {
+            setIsValidatingRepo(false);
+        }
+    };
 
     const submitHandler = async (event) => {
         event.preventDefault();
@@ -69,6 +133,8 @@ const NewApp = () => {
             setNamespace("default");
             setDescription("");
             setAutoSync(false);
+            setRepoValid(false);
+            setBranches([]);
         } catch (err) {
             setError(err.message);
             console.error("NewApp submit error:", err);
@@ -89,16 +155,34 @@ const NewApp = () => {
                     placeholder="Github Repo URL"
                     value={repoURL}
                     onChange={changeRepoURL}
+                    onBlur={handleRepoBlur}
                 />
+
+                {isValidatingRepo && (
+                    <Message type="info" text="Repository kontrol ediliyor..." />
+                )}
+
+                {repoError && (
+                    <Message type="err" text={`Repo Hatası: ${repoError}`} />
+                )}
+
+                {repoValid && (
+                    <Message type="sccs" text="✓ Repository bulundu!" />
+                )}
+
+                {repoValid && branches.length > 0 && (
+                    <FormSelect
+                        options={branches}
+                        value={branchName}
+                        onChange={changeBranchName}
+                        placeholder="Branch seçin"
+                    />
+                )}
+
                 <FormInput
                     placeholder="Github Repo Yol (Manifest dosyalarının bulunduğu dizin)"
                     value={repoPath}
                     onChange={changeRepoPath}
-                />
-                <FormInput
-                    placeholder="Branch İsmi (main)"
-                    value={branchName}
-                    onChange={changeBranchName}
                 />
                 <FormInput
                     placeholder="Namespace"
@@ -116,7 +200,10 @@ const NewApp = () => {
                     checked={autoSync}
                     onChange={changeAutoSync}
                 />
-                <FormButton text={isLoading ? "Ekleniyor..." : "Ekle"} />
+                <FormButton
+                    text={isLoading ? "Ekleniyor..." : "Ekle"}
+                    disabled={!repoValid}
+                />
                 <FormConstraint text="* Github reposu public erişime sahip olmalıdır." />
             </FormContainer>
 

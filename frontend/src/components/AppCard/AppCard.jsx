@@ -1,7 +1,7 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import classes from "./AppCard.module.css";
 import { FaGitAlt } from "react-icons/fa6";
-import { FaSyncAlt, FaInfoCircle } from "react-icons/fa";
+import { FaSyncAlt } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import { useFetch } from "../../../hooks/useFetch";
 import { toast } from "react-toastify";
@@ -11,6 +11,7 @@ import StatusBadge from "../StatusBadge";
 const AppCard = ({ data, onUpdate }) => {
 
     const API_URL = import.meta.env.VITE_API_URL;
+    const navigate = useNavigate();
 
     // for sync
     const {
@@ -28,14 +29,15 @@ const AppCard = ({ data, onUpdate }) => {
         request: removeRequest
     } = useFetch(`${API_URL}/api/`, "GET", false);
 
-    const syncHandler = async (id) => {
+    const syncHandler = async (e, id) => {
+        e.stopPropagation(); // Prevent card click
         try {
             await syncRequest(`${API_URL}/api/apps/${id}/sync`);
             toast.success(`${data.projectName} başarıyla senkronize edildi`);
 
             // Refresh the apps list
             if (onUpdate) {
-                onUpdate();
+                await onUpdate();
             }
         } catch (err) {
             const errorMessage = err.message || "Senkronizasyon hatası";
@@ -43,17 +45,23 @@ const AppCard = ({ data, onUpdate }) => {
             toast.error(`${errorMessage}${errorDetails}`, {
                 autoClose: 10000
             });
+
+            // Refresh on error too to show updated status
+            if (onUpdate) {
+                await onUpdate();
+            }
         }
     }
 
-    const removeHandler = async (id) => {
+    const removeHandler = async (e, id) => {
+        e.stopPropagation(); // Prevent card click
         try {
             await removeRequest(`${API_URL}/api/apps/${id}/remove`);
             toast.success(`${data.projectName} başarıyla kaldırıldı`);
 
             // Refresh the apps list
             if (onUpdate) {
-                onUpdate();
+                await onUpdate();
             }
         } catch (err) {
             toast.error(`Silme hatası: ${err.message || err}`);
@@ -66,8 +74,15 @@ const AppCard = ({ data, onUpdate }) => {
         return classes[`status-${status}`];
     };
 
+    const handleCardClick = () => {
+        navigate(`/apps/${data.id}`);
+    };
+
     return (
-        <div className={`${classes["app-card"]} ${getStatusClass()}`}>
+        <div
+            className={`${classes["app-card"]} ${getStatusClass()}`}
+            onClick={handleCardClick}
+        >
             <div className={classes.header}>
                 <FaGitAlt className={classes["git-icon"]} />
                 <p className={classes.title}>{data.projectName}</p>
@@ -84,7 +99,7 @@ const AppCard = ({ data, onUpdate }) => {
                     <p className={classes.truncate}>{data.repoURL}</p>
                     <p>{data.branchName}</p>
                     <p>{data.namespace}</p>
-                    <p>{data.syncCount || 0} kez</p>
+                    <p>{data.syncCount || 0}</p>
                     <p>{data.lastSync ? formatDate(data.lastSync) : 'Henüz yok'}</p>
                 </div>
             </div>
@@ -92,7 +107,7 @@ const AppCard = ({ data, onUpdate }) => {
                 <button
                     disabled={syncIsLoading ? true : false}
                     className={classes["btn-footer"]}
-                    onClick={() => syncHandler(data.id)}
+                    onClick={(e) => syncHandler(e, data.id)}
                 >
                     <FaSyncAlt
                         className={`${classes["sync-icon"]} ${syncIsLoading && classes.spin}`}
@@ -102,17 +117,10 @@ const AppCard = ({ data, onUpdate }) => {
                 <button
                     disabled={removeIsLoading ? true : false}
                     className={`${classes["btn-footer"]} ${classes["btn-cancel"]}`}
-                    onClick={() => removeHandler(data.id)}
+                    onClick={(e) => removeHandler(e, data.id)}
                 >
                     <MdCancel className={classes["cancel-icon"]} />
                 </button>
-                <Link
-                    to={`/apps/${data.id}`}
-                    className={`${classes["btn-footer"]} ${classes["btn-detail"]}`}
-                >
-                    <FaInfoCircle className={classes["detail-icon"]} />
-                    <span>Detay</span>
-                </Link>
             </div>
         </div>
     );

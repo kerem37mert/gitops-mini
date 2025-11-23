@@ -10,9 +10,23 @@
 .err {
     background-color: var(--error);
     color: #fff;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
 }
 
 .sccs {
     background-color: var(--success);
     color: #fff;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.info {
+    background-color: #3b82f6;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
 }

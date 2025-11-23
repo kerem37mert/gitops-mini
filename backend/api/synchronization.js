@@ -116,12 +116,6 @@ export const synchronization = async (req, res) => {
     }
 }
 
-const isNotFound = (error) => {
-    if (error.statusCode === 404) return true;
-    if (error.response && error.response.statusCode === 404) return true;
-    if (error.body && error.body.code === 404) return true;
-    return false;
-}
 
 // Manifest uygulama fonksiyonu
 const applyManifest = async (manifest, namespace) => {
@@ -131,7 +125,7 @@ const applyManifest = async (manifest, namespace) => {
     try {
         await k8sApi.readNamespace(namespace);
     } catch (error) {
-        if (isNotFound(error))
+        if (error.statusCode === 404)
             await k8sApi.createNamespace({
                 metadata: {
                     name: namespace
@@ -171,7 +165,7 @@ const applyDeployment = async (manifest, namespace) => {
             body: manifest
         });
     } catch (error) {
-        if (isNotFound(error))
+        if (error.statusCode === 404)
             // deployment yoksa oluştur
             return await k8sAppsApi.createNamespacedDeployment({
                 namespace,
@@ -198,7 +192,7 @@ const applyService = async (manifest, namespace) => {
             body: manifest
         });
     } catch (error) {
-        if (isNotFound(error))
+        if (error.statusCode === 404)
             // service yoksa oluştur
             return await k8sApi.createNamespacedService({
                 namespace,
@@ -253,7 +247,7 @@ const applyIngress = async (manifest, namespace) => {
             body: manifest
         });
     } catch (error) {
-        if (isNotFound(error))
+        if (error.statusCode === 404)
             return await k8sNetworkingApi.createNamespacedIngress({
                 namespace,
                 body: manifest

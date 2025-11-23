@@ -9,7 +9,13 @@ import { fileURLToPath } from "url";
 export const kubernetesClient = new k8s.KubeConfig();
 
 // Minikube configi otomatik olarak yükler
-kubernetesClient.loadFromDefault();
+// kubernetesClient.loadFromDefault();
+const kubeConfigPath = path.join(process.env.HOME, '.kube', 'config');
+if (fs.existsSync(kubeConfigPath)) {
+    kubernetesClient.loadFromFile(kubeConfigPath);
+} else {
+    kubernetesClient.loadFromDefault();
+}
 
 // HTTP kullanan clusterlar için skipTLSVerify ayarını true yap
 for (const cluster of kubernetesClient.clusters) {

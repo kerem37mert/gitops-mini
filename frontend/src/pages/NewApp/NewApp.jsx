@@ -156,19 +156,8 @@ const NewApp = () => {
                     value={repoURL}
                     onChange={changeRepoURL}
                     onBlur={handleRepoBlur}
+                    className={isValidatingRepo ? 'validating' : repoError ? 'error' : repoValid ? 'success' : ''}
                 />
-
-                {isValidatingRepo && (
-                    <Message type="info" text="Repository kontrol ediliyor..." />
-                )}
-
-                {repoError && (
-                    <Message type="err" text={`Repo Hatası: ${repoError}`} />
-                )}
-
-                {repoValid && (
-                    <Message type="sccs" text="✓ Repository bulundu!" />
-                )}
 
                 {repoValid && branches.length > 0 && (
                     <FormSelect

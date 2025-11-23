@@ -5,7 +5,7 @@ const WelcomeSection = () => {
     return (
         <div className={classes.welcome}>
             <div className={classes.content}>
-                <h1 className={classes.title}>GitOps Mini'ye Hoş Geldin! 🚀</h1>
+                <h1 className={classes.title}>GitOps Mini'ye Hoş Geldin</h1>
                 <p className={classes.description}>
                     Kubernetes uygulamalarını Git repository'lerinden otomatik olarak deploy et ve yönet.
                     GitOps prensipleriyle altyapını kod olarak yönetmenin gücünü keşfet.

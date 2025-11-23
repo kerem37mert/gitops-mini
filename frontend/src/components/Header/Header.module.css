@@ -1,5 +1,5 @@
 .header {
-    background-color: orangered;
+    background-color: var(--primary);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -27,11 +27,11 @@
     font-size: 1rem;
     text-decoration: none;
     color: #fff;
-    background-color: orange;
+    background-color: var(--primary-light);
     border-radius: 10px;
     transition: 0.2s;
 }
 
 .nav ul li a:hover {
-    background-color: darkorange;
+    background-color: var(--primary-dark);
 }

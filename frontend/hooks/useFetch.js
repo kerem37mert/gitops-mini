@@ -35,13 +35,16 @@ export const useFetch = (url, method, isInitialCall = false, body = null) => {
             }
 
             setData(responseData);
+            return responseData;
 
         } catch (err) {
-            // Hata objesini veya mesajını set et
+            // Hata objesini state'e set et
             setError(err);
+            // Hatayı tekrar fırlat ki çağıran taraf yakalayabilsin
+            throw err;
+        } finally {
+            setIsLoading(false);
         }
-
-        setIsLoading(false);
     }
 
     useEffect(() => {

@@ -9,9 +9,16 @@ db.prepare(`
     repoURL TEXT,
     repoPath TEXT,
     branchName TEXT,
-    namespace TEXT
+    namespace TEXT,
     lastSync TEXT,
-    createdAt TEXT
+    createdAt TEXT,
+    status TEXT DEFAULT 'active',
+    syncStatus TEXT DEFAULT 'pending',
+    errorMessage TEXT,
+    description TEXT,
+    syncCount INTEGER DEFAULT 0,
+    lastSyncDuration INTEGER,
+    autoSync INTEGER DEFAULT 0
   )
 `).run();
 

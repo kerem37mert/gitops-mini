@@ -7,6 +7,7 @@ import yaml from "js-yaml";
 
 export const synchronization = async (req, res) => {
     const id = req.params.id;
+    const syncStartTime = Date.now();
 
     try {
         const app = db.prepare("SELECT * FROM apps WHERE id=?").get(id);
@@ -26,6 +27,15 @@ export const synchronization = async (req, res) => {
         try {
             await git.clone(app.repoURL, repoDir, ['--branch', app.branchName, '--depth', '1']);
         } catch (error) {
+            // Git clone hatası - sync failed olarak işaretle
+            db.prepare(`
+                UPDATE apps 
+                SET syncStatus='failed',
+                    errorMessage=?,
+                    status='failed'
+                WHERE id=?
+            `).run(error.message, id);
+
             return res.status(500).json({
                 message: error.message
             });
@@ -92,22 +102,55 @@ export const synchronization = async (req, res) => {
             }
         }
 
+        // Sync başarılı - metrikleri güncelle
+        const syncDuration = Date.now() - syncStartTime;
+        const hasErrors = results.some(r => !r.status);
+
         try {
-            const stmt = db.prepare("UPDATE apps SET lastSync=? WHERE id=?");
-            stmt.run(new Date().toISOString(), id);
+            const stmt = db.prepare(`
+                UPDATE apps 
+                SET lastSync=?, 
+                    syncStatus=?,
+                    syncCount=syncCount+1,
+                    lastSyncDuration=?,
+                    errorMessage=NULL,
+                    status=?
+                WHERE id=?
+            `);
+            stmt.run(
+                new Date().toISOString(),
+                hasErrors ? 'failed' : 'success',
+                syncDuration,
+                hasErrors ? 'failed' : 'active',
+                id
+            );
         } catch (error) {
             throw error;
         }
 
-
         res.json({
             status: true,
-            results
+            results,
+            syncDuration
         })
 
         // veri tabanı sorgu hatası
     } catch (error) {
         console.error("Synchronization error:", error);
+
+        // Genel hata - sync failed olarak işaretle
+        try {
+            db.prepare(`
+                UPDATE apps 
+                SET syncStatus='failed',
+                    errorMessage=?,
+                    status='failed'
+                WHERE id=?
+            `).run(error.message, id);
+        } catch (dbError) {
+            console.error("Failed to update error status:", dbError);
+        }
+
         res.status(500).json({
             message: error.message,
             stack: error.stack,

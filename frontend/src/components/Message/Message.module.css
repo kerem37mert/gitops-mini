@@ -1,16 +1,18 @@
 .message {
     width: 600px;
-    background-color: red;
     margin: 20px auto;
-    padding: 5px;
+    padding: 10px 15px;
     box-sizing: border-box;
+    border-radius: 8px;
+    font-weight: 500;
 }
 
 .err {
-    background-color: tomato;
+    background-color: var(--error);
     color: #fff;
 }
 
 .sccs {
-    background-color: greenyellow;
+    background-color: var(--success);
+    color: #fff;
 }

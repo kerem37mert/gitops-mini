@@ -1,6 +1,7 @@
 .form-constraint {
     text-align: left;
-    font-size: 0.8rem;
-    color: rgb(97, 97, 97);
-    margin-top: 10px;
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-top: 1rem;
+    font-style: italic;
 }

@@ -1,3 +1,13 @@
+:root {
+  --primary: #7c3aed;
+  --primary-dark: #6d28d9;
+  --primary-light: #a78bfa;
+  --success: #10b981;
+  --error: #ef4444;
+  --gray: #6b7280;
+  --gray-dark: #4b5563;
+}
+
 body {
   margin: 0;
 }

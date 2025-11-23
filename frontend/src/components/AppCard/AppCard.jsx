@@ -6,7 +6,7 @@ import { useFetch } from "../../../hooks/useFetch";
 import { toast } from "react-toastify";
 import formatDate from "../../../helpers/formatDate";
 
-const AppCard = ({ data }) => {
+const AppCard = ({ data, onUpdate }) => {
 
     const API_URL = import.meta.env.VITE_API_URL;
 
@@ -27,22 +27,35 @@ const AppCard = ({ data }) => {
     } = useFetch(`${API_URL}/api/`, "GET", false);
 
     const syncHandler = async (id) => {
-        await syncRequest(`${API_URL}/api/apps/${id}/sync`);
+        try {
+            await syncRequest(`${API_URL}/api/apps/${id}/sync`);
+            toast.success(`${data.projectName} başarıyla senkronize edildi`);
 
-        if (syncError) {
-            const errorMessage = syncError.message || "Senkronizasyon hatası";
-            const errorDetails = syncError.details ? `\nDetaylar: ${JSON.stringify(syncError.details)}` : "";
+            // Refresh the apps list
+            if (onUpdate) {
+                onUpdate();
+            }
+        } catch (err) {
+            const errorMessage = err.message || "Senkronizasyon hatası";
+            const errorDetails = err.details ? `\nDetaylar: ${JSON.stringify(err.details)}` : "";
             toast.error(`${errorMessage}${errorDetails}`, {
-                autoClose: 10000 // Hata detaylarını okumak için süreyi uzat
+                autoClose: 10000
             });
         }
     }
 
     const removeHandler = async (id) => {
-        await removeRequest(`${API_URL}/api/apps/${id}/remove`);
+        try {
+            await removeRequest(`${API_URL}/api/apps/${id}/remove`);
+            toast.success(`${data.projectName} başarıyla kaldırıldı`);
 
-        if (!removeError)
-            toast.success(`${id} id'li uygulama başarıyla kaldırıldı`);
+            // Refresh the apps list
+            if (onUpdate) {
+                onUpdate();
+            }
+        } catch (err) {
+            toast.error(`Silme hatası: ${err.message || err}`);
+        }
     }
 
     return (

@@ -28,7 +28,7 @@ const Apps = () => {
                     <p>Henüz hiç uygulaman yok</p>
                 ) : (
                     data?.message?.map(item => (
-                        <AppCard key={item.id} data={item} />
+                        <AppCard key={item.id} data={item} onUpdate={request} />
                     ))
                 )
             }

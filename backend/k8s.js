@@ -11,11 +11,19 @@ export const kubernetesClient = new k8s.KubeConfig();
 // Minikube configi otomatik olarak yükler
 // kubernetesClient.loadFromDefault();
 const kubeConfigPath = path.join(process.env.HOME, '.kube', 'config');
+console.log(`[DEBUG] Trying to load kubeconfig from: ${kubeConfigPath}`);
+console.log(`[DEBUG] File exists: ${fs.existsSync(kubeConfigPath)}`);
+
 if (fs.existsSync(kubeConfigPath)) {
     kubernetesClient.loadFromFile(kubeConfigPath);
+    console.log("[DEBUG] Loaded from file.");
 } else {
     kubernetesClient.loadFromDefault();
+    console.log("[DEBUG] Loaded from default.");
 }
+
+console.log(`[DEBUG] Current Context: ${kubernetesClient.currentContext}`);
+console.log(`[DEBUG] Clusters: ${JSON.stringify(kubernetesClient.clusters.map(c => ({ name: c.name, server: c.server })))}`);
 
 // HTTP kullanan clusterlar için skipTLSVerify ayarını true yap
 for (const cluster of kubernetesClient.clusters) {

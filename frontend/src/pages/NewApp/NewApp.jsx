@@ -17,11 +17,11 @@ const NewApp = () => {
     const [branchName, setBranchName] = useState("");
     const [namespace, setNamespace] = useState("default");
 
-    const { 
-        isLoading, 
-        error, 
-        data, 
-        request 
+    const {
+        isLoading,
+        error,
+        data,
+        request
     } = useFetch(`${API_URL}/api/newApp`, "POST", false, {
         projectName,
         repoURL,
@@ -36,46 +36,49 @@ const NewApp = () => {
     const changeBranchName = event => setBranchName(event.target.value);
     const changeNamespace = event => setNamespace(event.target.value);
 
-    const submitHandler = (event) => {
+    const submitHandler = async (event) => {
         event.preventDefault();
-        request();
 
-        if(!error) {
+        try {
+            await request();
+
             setProjectName("");
             setRepoURL("");
             setRepoPath("");
             setBranchName("");
             setNamespace("default");
+        } catch (err) {
+            console.error("NewApp submit error:", err);
         }
     }
 
     return (
         <>
-            <FormContainer onSubmit={ submitHandler }>
-                <FormInput 
-                    placeholder="Proje İsmi" 
-                    value={ projectName }
-                    onChange={ changeProjectName } 
+            <FormContainer onSubmit={submitHandler}>
+                <FormInput
+                    placeholder="Proje İsmi"
+                    value={projectName}
+                    onChange={changeProjectName}
                 />
-                <FormInput 
-                    placeholder="Github Repo URL" 
-                    value={ repoURL }
-                    onChange={ changeRepoURL } 
+                <FormInput
+                    placeholder="Github Repo URL"
+                    value={repoURL}
+                    onChange={changeRepoURL}
                 />
-                <FormInput 
-                    placeholder="Github Repo Yol (Manifest dosyalarının bulunduğu dizin)" 
-                    value={ repoPath }
-                    onChange={ changeRepoPath } 
+                <FormInput
+                    placeholder="Github Repo Yol (Manifest dosyalarının bulunduğu dizin)"
+                    value={repoPath}
+                    onChange={changeRepoPath}
                 />
-                <FormInput 
-                    placeholder="Branch İsmi (master)" 
-                    value={ branchName }
-                    onChange={ changeBranchName } 
+                <FormInput
+                    placeholder="Branch İsmi (master)"
+                    value={branchName}
+                    onChange={changeBranchName}
                 />
-                <FormInput 
-                    placeholder="Namespace" 
-                    value={ namespace }
-                    onChange={ changeNamespace } 
+                <FormInput
+                    placeholder="Namespace"
+                    value={namespace}
+                    onChange={changeNamespace}
                 />
                 <FormButton text="Ekle" />
                 <FormConstraint text="* Github reposu public erişime sahip olmalıdır." />
@@ -83,7 +86,7 @@ const NewApp = () => {
 
             {
                 error && (
-                    <Message type="err" text={ `Hata: ${ error }` } />
+                    <Message type="err" text={`Hata: ${error.message || error}`} />
                 )
             }
 

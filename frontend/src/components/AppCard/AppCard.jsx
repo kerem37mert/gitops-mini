@@ -11,10 +11,10 @@ const AppCard = ({ data }) => {
     const API_URL = import.meta.env.VITE_API_URL;
 
     // for sync
-    const { 
-        isLoading: syncIsLoading, 
-        error: syncError, 
-        data: syncData, 
+    const {
+        isLoading: syncIsLoading,
+        error: syncError,
+        data: syncData,
         request: syncRequest
     } = useFetch(`${API_URL}/api/apps/`, "GET", false);
 
@@ -29,25 +29,30 @@ const AppCard = ({ data }) => {
     const syncHandler = async (id) => {
         await syncRequest(`${API_URL}/api/apps/${id}/sync`);
 
-        if(syncError)
-            toast.error(syncError);    
+        if (syncError) {
+            const errorMessage = syncError.message || "Senkronizasyon hatası";
+            const errorDetails = syncError.details ? `\nDetaylar: ${JSON.stringify(syncError.details)}` : "";
+            toast.error(`${errorMessage}${errorDetails}`, {
+                autoClose: 10000 // Hata detaylarını okumak için süreyi uzat
+            });
+        }
     }
 
     const removeHandler = async (id) => {
         await removeRequest(`${API_URL}/api/apps/${id}/remove`);
 
-        if(!removeError)
+        if (!removeError)
             toast.success(`${id} id'li uygulama başarıyla kaldırıldı`);
     }
 
     return (
-        <div className={ classes["app-card"] }> 
-            <div className={ classes.header }>
-                <FaGitAlt className={ classes["git-icon"] } />
-                <p className={ classes.title }>{ data.projectName }</p>
+        <div className={classes["app-card"]}>
+            <div className={classes.header}>
+                <FaGitAlt className={classes["git-icon"]} />
+                <p className={classes.title}>{data.projectName}</p>
             </div>
-            <div className={ classes.body }>
-                <div className={ classes.labels }>
+            <div className={classes.body}>
+                <div className={classes.labels}>
                     <p>Proje İsmi:</p>
                     <p>Repository:</p>
                     <p>Yol:</p>
@@ -56,35 +61,35 @@ const AppCard = ({ data }) => {
                     <p>Oluşturulma Tarihi: </p>
                     <p>Son Senkronizasyon</p>
                 </div>
-                <div className={ classes.values }>
-                    <p>{ data.projectName }</p>
-                    <p>{ data.repoURL }</p>
-                    <p>{ data.repoPath }</p>
-                    <p>{ data.branchName }</p>
-                    <p>{ data.namespace }</p>
-                    <p>{ formatDate(data.createdAt) }</p>
+                <div className={classes.values}>
+                    <p>{data.projectName}</p>
+                    <p>{data.repoURL}</p>
+                    <p>{data.repoPath}</p>
+                    <p>{data.branchName}</p>
+                    <p>{data.namespace}</p>
+                    <p>{formatDate(data.createdAt)}</p>
                     <p>
-                        { data.lastSync ? formatDate(data.lastSync) : formatDate(data.createdAt) }
+                        {data.lastSync ? formatDate(data.lastSync) : formatDate(data.createdAt)}
                     </p>
                 </div>
             </div>
-            <div className={ classes.footer }>
+            <div className={classes.footer}>
                 <button
-                    disabled={ syncIsLoading ? true : false } 
-                    className={ classes["btn-footer"] } 
-                    onClick={ () => syncHandler(data.id) }
+                    disabled={syncIsLoading ? true : false}
+                    className={classes["btn-footer"]}
+                    onClick={() => syncHandler(data.id)}
                 >
-                    <FaSyncAlt 
-                        className={ `${classes["sync-icon"]} ${syncIsLoading && classes.spin}` } 
+                    <FaSyncAlt
+                        className={`${classes["sync-icon"]} ${syncIsLoading && classes.spin}`}
                     />
                     <span>SYNC</span>
                 </button>
                 <button
-                    disabled={ removeIsLoading ? true : false } 
-                    className={ `${classes["btn-footer"]} ${classes["btn-cancel"]}` }
-                    onClick={ () => removeHandler(data.id) }
+                    disabled={removeIsLoading ? true : false}
+                    className={`${classes["btn-footer"]} ${classes["btn-cancel"]}`}
+                    onClick={() => removeHandler(data.id)}
                 >
-                    <MdCancel className={ classes["cancel-icon"] } />
+                    <MdCancel className={classes["cancel-icon"]} />
                 </button>
             </div>
         </div>

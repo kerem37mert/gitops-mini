@@ -69,12 +69,15 @@ export const synchronization = async (req, res) => {
                         result
                     });
                 } catch (error) {
+                    console.error(`Error applying manifest ${file}:`, error);
                     results.push({
                         file,
                         kind: manifest.kind,
                         name: manifest.metadata?.name,
                         status: false,
-                        error: error.message
+                        error: error.message,
+                        stack: error.stack,
+                        details: error.body || "No additional details"
                     });
                 }
             }
@@ -104,10 +107,12 @@ export const synchronization = async (req, res) => {
 
         // veri tabanı sorgu hatası
     } catch (error) {
+        console.error("Synchronization error:", error);
         res.status(500).json({
-            message: error.message
+            message: error.message,
+            stack: error.stack,
+            details: error.body || "No additional details"
         });
-        console.log(error);
     }
 }
 

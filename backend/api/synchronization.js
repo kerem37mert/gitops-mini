@@ -1,5 +1,5 @@
 import db from "../db.js";
-import { k8sApi, k8sAppsApi, REPOS_DIR } from "../k8s.js";
+import { k8sApi, k8sAppsApi, k8sNetworkingApi, REPOS_DIR } from "../k8s.js";
 import path from "path";
 import fs from "fs-extra";
 import simpleGit from "simple-git";
@@ -12,10 +12,10 @@ export const synchronization = async (req, res) => {
         const app = db.prepare("SELECT * FROM apps WHERE id=?").get(id);
 
         // eğer veritabanında yoksa
-        if(!app)
+        if (!app)
             return res.status(404).json({
                 message: "uygulama bulunamadı"
-        });
+            });
 
         // daha önceden klonlanmış repoyu tekrar clonelamadan önce sil
         const repoDir = path.join(REPOS_DIR, String(app.id));
@@ -25,14 +25,14 @@ export const synchronization = async (req, res) => {
         const git = simpleGit();
         try {
             await git.clone(app.repoURL, repoDir, ['--branch', app.branchName, '--depth', '1']);
-        } catch(error) {
+        } catch (error) {
             return res.status(500).json({
                 message: error.message
             });
         }
 
         // mainefest dosyalarının bulundupu yolu elde et
-        const manifestsDir = path.join(repoDir, app.repoPath); 
+        const manifestsDir = path.join(repoDir, app.repoPath);
         const files = await fs.readdir(manifestsDir);
 
         // yoldaki dosyalardan manifest dosyaası olanları filtrele
@@ -43,13 +43,13 @@ export const synchronization = async (req, res) => {
         const deployments = [];
 
         // tüm manifest dosyalarını uygula
-        for(const file of yamlFiles) {
+        for (const file of yamlFiles) {
             const filePath = path.join(manifestsDir, file); // manifest dosyasının yolu
             const content = await fs.readFile(filePath, 'utf8'); // manifest dosyası içeriği
             const manifests = yaml.loadAll(content); // okyunan yaml içeriğini dizi şeklinde js objesine çevir
 
             // manifests dizisi içerisindeki manifestleri gez
-            for(const manifest of manifests) {
+            for (const manifest of manifests) {
                 if (!manifest) continue;
 
                 try {
@@ -68,7 +68,7 @@ export const synchronization = async (req, res) => {
                         status: true,
                         result
                     });
-                } catch(error) {
+                } catch (error) {
                     results.push({
                         file,
                         kind: manifest.kind,
@@ -81,10 +81,10 @@ export const synchronization = async (req, res) => {
         }
 
         // deploymentsları yeniden başlat
-        for(const deployment of deployments){
+        for (const deployment of deployments) {
             try {
                 await restartDeployment(deployment.name, deployment.namespace);
-            } catch(error) {
+            } catch (error) {
                 console.error(`Deployment yeniden başlatma hatası: ${deployment.name}`, error.message);
             }
         }
@@ -101,9 +101,9 @@ export const synchronization = async (req, res) => {
             status: true,
             results
         })
-        
-    // veri tabanı sorgu hatası
-    } catch(error) {
+
+        // veri tabanı sorgu hatası
+    } catch (error) {
         res.status(500).json({
             message: error.message
         });
@@ -119,20 +119,22 @@ const applyManifest = async (manifest, namespace) => {
     // minkubeda namespace yoksa oluştur
     try {
         await k8sApi.readNamespace(namespace);
-    } catch(error) {
-        if(error.statusCode === 404)
+    } catch (error) {
+        if (error.statusCode === 404)
             await k8sApi.createNamespace({
                 metadata: {
                     name: namespace
                 }
-            }); 
+            });
     }
 
-    switch(kind) {
+    switch (kind) {
         case "Deployment":
             return await applyDeployment(manifest, namespace);
         case "Service":
             return await applyService(manifest, namespace);
+        case "Ingress":
+            return await applyIngress(manifest, namespace);
         default:
             throw new Error(`bilinmeyen tür: ${kind}`);
     }
@@ -142,7 +144,7 @@ const applyManifest = async (manifest, namespace) => {
 // Deployment uygulama fonksiyonu
 const applyDeployment = async (manifest, namespace) => {
     const name = manifest.metadata.name;
-    
+
     try {
         // deployment olup olmadığını kontrol et. yoksa catche düşecek
         await k8sAppsApi.readNamespacedDeployment({
@@ -157,7 +159,7 @@ const applyDeployment = async (manifest, namespace) => {
             namespace,
             body: manifest
         });
-    } catch(error) {
+    } catch (error) {
         if (error.statusCode === 404)
             // deployment yoksa oluştur
             return await k8sAppsApi.createNamespacedDeployment({
@@ -184,7 +186,7 @@ const applyService = async (manifest, namespace) => {
             namespace,
             body: manifest
         });
-    } catch(error) {
+    } catch (error) {
         if (error.statusCode === 404)
             // service yoksa oluştur
             return await k8sApi.createNamespacedService({
@@ -209,7 +211,7 @@ const restartDeployment = async (name, namespace) => {
 
         if (!deployment.spec.template.metadata.annotations)
             deployment.spec.template.metadata.annotations = {};
-        
+
         deployment.spec.template.metadata.annotations['kubectl.kubernetes.io/restartedAt'] = new Date().toISOString();
 
         // Deploymentı güncelle
@@ -218,8 +220,33 @@ const restartDeployment = async (name, namespace) => {
             namespace: namespace,
             body: deployment
         });
-    } catch(error) {
+    } catch (error) {
         console.error(`yenşden başlatma hatası: ${name}`, error.message);
+        throw error;
+    }
+}
+
+// Ingress uygulama fonksiyonu
+const applyIngress = async (manifest, namespace) => {
+    const name = manifest.metadata.name;
+
+    try {
+        await k8sNetworkingApi.readNamespacedIngress({
+            name,
+            namespace
+        });
+
+        return await k8sNetworkingApi.replaceNamespacedIngress({
+            name,
+            namespace,
+            body: manifest
+        });
+    } catch (error) {
+        if (error.statusCode === 404)
+            return await k8sNetworkingApi.createNamespacedIngress({
+                namespace,
+                body: manifest
+            });
         throw error;
     }
 }

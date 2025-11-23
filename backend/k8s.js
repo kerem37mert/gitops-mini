@@ -9,10 +9,11 @@ import { fileURLToPath } from "url";
 export const kubernetesClient = new k8s.KubeConfig();
 
 // Minikube configi otomatik olarak yükler
-kubernetesClient.loadFromDefault(); 
+kubernetesClient.loadFromDefault();
 
 export const k8sApi = kubernetesClient.makeApiClient(k8s.CoreV1Api);
 export const k8sAppsApi = kubernetesClient.makeApiClient(k8s.AppsV1Api);
+export const k8sNetworkingApi = kubernetesClient.makeApiClient(k8s.NetworkingV1Api);
 
 // repoların olacağı klasöürü yoksa oluştur
 const __filename = fileURLToPath(import.meta.url);

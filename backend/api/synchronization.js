@@ -168,7 +168,7 @@ const applyManifest = async (manifest, namespace) => {
     try {
         await k8sApi.readNamespace(namespace);
     } catch (error) {
-        if (error.statusCode === 404)
+        if (error.statusCode === 404 || error.code === 404)
             await k8sApi.createNamespace({
                 metadata: {
                     name: namespace
@@ -208,7 +208,7 @@ const applyDeployment = async (manifest, namespace) => {
             body: manifest
         });
     } catch (error) {
-        if (error.statusCode === 404)
+        if (error.statusCode === 404 || error.code === 404)
             // deployment yoksa oluştur
             return await k8sAppsApi.createNamespacedDeployment({
                 namespace,
@@ -235,7 +235,7 @@ const applyService = async (manifest, namespace) => {
             body: manifest
         });
     } catch (error) {
-        if (error.statusCode === 404)
+        if (error.statusCode === 404 || error.code === 404)
             // service yoksa oluştur
             return await k8sApi.createNamespacedService({
                 namespace,
@@ -290,7 +290,7 @@ const applyIngress = async (manifest, namespace) => {
             body: manifest
         });
     } catch (error) {
-        if (error.statusCode === 404)
+        if (error.statusCode === 404 || error.code === 404)
             return await k8sNetworkingApi.createNamespacedIngress({
                 namespace,
                 body: manifest

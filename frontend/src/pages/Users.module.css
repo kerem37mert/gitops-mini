@@ -20,7 +20,7 @@
 
 .createButton {
     padding: 12px 24px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--primary);
     border: none;
     border-radius: 10px;
     color: #ffffff;
@@ -32,7 +32,8 @@
 
 .createButton:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+    background: var(--primary-dark);
 }
 
 .loading {
@@ -66,7 +67,7 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    background: var(--primary);
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -77,8 +78,8 @@
 
 .userCard:hover {
     transform: translateY(-6px);
-    box-shadow: 0 12px 32px rgba(102, 126, 234, 0.25);
-    border-color: rgba(102, 126, 234, 0.4);
+    box-shadow: 0 12px 32px rgba(124, 58, 237, 0.25);
+    border-color: rgba(124, 58, 237, 0.4);
     background: linear-gradient(135deg, rgba(40, 40, 65, 0.5) 0%, rgba(30, 30, 50, 0.6) 100%);
 }
 
@@ -271,8 +272,8 @@
 .input:focus,
 .select:focus {
     background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(102, 126, 234, 0.6);
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
 }
 
 .select option {
@@ -309,11 +310,12 @@
 }
 
 .submitButton {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--primary);
     color: #ffffff;
 }
 
 .submitButton:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+    background: var(--primary-dark);
 }

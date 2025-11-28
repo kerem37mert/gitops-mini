@@ -21,7 +21,7 @@ const Login = () => {
         if (result.success) {
             navigate('/');
         } else {
-            setError(result.message || 'Login failed');
+            setError(result.message || 'Giriş Başarısız');
         }
 
         setLoading(false);
@@ -32,7 +32,7 @@ const Login = () => {
             <div className={styles.loginContainer}>
                 <div className={styles.loginCard}>
                     <h1 className={styles.title}>GitOps Mini</h1>
-                    <p className={styles.subtitle}>Sign in to continue</p>
+                    <p className={styles.subtitle}>Giriş Yap</p>
 
                     {error && (
                         <div className={styles.errorMessage}>
@@ -42,28 +42,28 @@ const Login = () => {
 
                     <form onSubmit={handleSubmit}>
                         <div className={styles.formGroup}>
-                            <label htmlFor="username" className={styles.label}>Username</label>
+                            <label htmlFor="username" className={styles.label}>Kullanıcı Adı</label>
                             <input
                                 id="username"
                                 type="text"
                                 className={styles.input}
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                placeholder="Enter your username"
+                                placeholder="Kullanıcı Adı"
                                 required
                                 autoFocus
                             />
                         </div>
 
                         <div className={styles.formGroup}>
-                            <label htmlFor="password" className={styles.label}>Password</label>
+                            <label htmlFor="password" className={styles.label}>Parola</label>
                             <input
                                 id="password"
                                 type="password"
                                 className={styles.input}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Enter your password"
+                                placeholder="Parola"
                                 required
                             />
                         </div>
@@ -73,12 +73,12 @@ const Login = () => {
                             className={styles.submitButton}
                             disabled={loading}
                         >
-                            {loading ? 'Signing in...' : 'Sign In'}
+                            {loading ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
                         </button>
                     </form>
 
                     <div className={styles.infoSection}>
-                        <p className={styles.infoText}>Default credentials:</p>
+                        <p className={styles.infoText}>Varsayıan bilgiler:</p>
                         <p className={styles.credentials}>
                             <strong>admin</strong> / <strong>admin123</strong>
                         </p>

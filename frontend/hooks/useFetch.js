@@ -11,6 +11,8 @@ export const useFetch = (url, method, isInitialCall = false, body = null) => {
         setIsLoading(true);
         setError(null)
 
+        const token = localStorage.getItem('token');
+
         const options = {
             method,
             headers: {
@@ -18,11 +20,24 @@ export const useFetch = (url, method, isInitialCall = false, body = null) => {
             },
         }
 
+        // Add authentication token if available
+        if (token) {
+            options.headers['Authorization'] = `Bearer ${token}`;
+        }
+
         if (body)
             options.body = JSON.stringify(body);
 
         try {
             const response = await fetch(customUrl, options);
+
+            // If unauthorized, redirect to login
+            if (response.status === 401 || response.status === 403) {
+                localStorage.removeItem('token');
+                window.location.href = '/login';
+                return;
+            }
+
             const responseData = await response.json();
 
             if (!response.ok) {

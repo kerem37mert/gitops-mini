@@ -1,0 +1,261 @@
+.container {
+    padding: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
+.createButton {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.createButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.loading {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 50px;
+    font-size: 18px;
+}
+
+.userGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.userCard {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 24px;
+    transition: all 0.3s ease;
+}
+
+.userCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+.userInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.username {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+}
+
+.badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge.user {
+    background: rgba(52, 211, 153, 0.2);
+    color: #34d399;
+    border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+.badge.superuser {
+    background: rgba(251, 191, 36, 0.2);
+    color: #fbbf24;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.userMeta {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.userMeta p {
+    margin: 4px 0;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.deleteButton {
+    padding: 8px 16px;
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 8px;
+    color: #ef4444;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.deleteButton:hover {
+    background: rgba(239, 68, 68, 0.3);
+    border-color: rgba(239, 68, 68, 0.5);
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.modalContent {
+    background: rgba(30, 30, 50, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px;
+    width: 90%;
+    max-width: 500px;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modalTitle {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 30px 0;
+}
+
+.formGroup {
+    margin-bottom: 20px;
+}
+
+.label {
+    display: block;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.input,
+.select {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.input:focus,
+.select:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(102, 126, 234, 0.6);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.select option {
+    background: #1e1e32;
+    color: #ffffff;
+}
+
+.modalActions {
+    display: flex;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.cancelButton,
+.submitButton {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancelButton {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cancelButton:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.submitButton {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #ffffff;
+}
+
+.submitButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}

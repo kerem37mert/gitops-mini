@@ -1,0 +1,147 @@
+.loginPage {
+    min-height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    margin: 0;
+    padding: 0;
+}
+
+.loginContainer {
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+}
+
+.loginCard {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    border-radius: 16px;
+    padding: 48px 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 8px 0;
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0 0 32px 0;
+    text-align: center;
+}
+
+.errorMessage {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--error);
+    color: var(--error);
+    padding: 14px 16px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.formGroup {
+    margin-bottom: 24px;
+}
+
+.label {
+    display: block;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.input {
+    width: 100%;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.input:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+}
+
+.submitButton {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary);
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+}
+
+.submitButton:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+}
+
+.submitButton:active {
+    transform: translateY(0);
+}
+
+.submitButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.infoSection {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+.infoText {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+    margin: 0 0 8px 0;
+}
+
+.credentials {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    margin: 0;
+}
+
+.credentials strong {
+    color: var(--primary-light);
+    font-family: 'Courier New', monospace;
+    background: rgba(124, 58, 237, 0.1);
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin: 0 4px;
+}

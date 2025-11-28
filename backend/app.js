@@ -4,6 +4,8 @@ import newApp from "./api/newApp.js";
 import { getApp, getApps, removeApp } from "./api/apps.js";
 import { synchronization } from "./api/synchronization.js";
 import { validateRepo, getBranches } from "./api/github.js";
+import { login, logout, getCurrentUser, authenticateToken, requireSuperuser } from "./api/auth.js";
+import { getAllUsers, createUser, updateUser, deleteUser, changePassword } from "./api/users.js";
 
 const app = express();
 
@@ -14,19 +16,27 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.post("/api/newapp", newApp);
+// Auth routes (public)
+app.post("/api/auth/login", login);
+app.post("/api/auth/logout", authenticateToken, logout);
+app.get("/api/auth/me", authenticateToken, getCurrentUser);
 
-app.get("/api/apps", getApps);
+// User management routes (protected)
+app.get("/api/users", authenticateToken, requireSuperuser, getAllUsers);
+app.post("/api/users", authenticateToken, requireSuperuser, createUser);
+app.put("/api/users/:id", authenticateToken, requireSuperuser, updateUser);
+app.delete("/api/users/:id", authenticateToken, requireSuperuser, deleteUser);
+app.put("/api/users/:id/password", authenticateToken, changePassword);
 
-app.get("/api/apps/:id", getApp);
+// App routes (protected)
+app.post("/api/newapp", authenticateToken, newApp);
+app.get("/api/apps", authenticateToken, getApps);
+app.get("/api/apps/:id", authenticateToken, getApp);
+app.get("/api/apps/:id/remove", authenticateToken, removeApp);
+app.get("/api/apps/:id/sync", authenticateToken, synchronization);
 
-app.get("/api/apps/:id/remove", removeApp);
-
-// daha sonra post yapcam
-app.get("/api/apps/:id/sync", synchronization);
-
-// GitHub API routes
-app.post("/api/github/validate", async (req, res) => {
+// GitHub API routes (protected)
+app.post("/api/github/validate", authenticateToken, async (req, res) => {
   try {
     const { repoURL } = req.body;
     const result = await validateRepo(repoURL);
@@ -36,7 +46,7 @@ app.post("/api/github/validate", async (req, res) => {
   }
 });
 
-app.post("/api/github/branches", async (req, res) => {
+app.post("/api/github/branches", authenticateToken, async (req, res) => {
   try {
     const { repoURL } = req.body;
     const branches = await getBranches(repoURL);

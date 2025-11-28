@@ -3,6 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0;
 }
 
 .title {
@@ -12,12 +13,18 @@
     margin-left: 2rem;
 }
 
+.nav {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
 .nav ul {
     margin: 0;
     padding: 0;
     list-style: none;
     display: flex;
-    margin-right: 1rem;
+    align-items: center;
 }
 
 .nav ul li a {
@@ -34,4 +41,49 @@
 
 .nav ul li a:hover {
     background-color: var(--primary-dark);
+}
+
+.userSection {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-right: 2rem;
+    margin-left: 1rem;
+}
+
+.username {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.superBadge {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: #1e1e32;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 12px;
+    letter-spacing: 0.5px;
+}
+
+.logoutButton {
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logoutButton:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
 }

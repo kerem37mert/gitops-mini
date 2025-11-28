@@ -54,10 +54,15 @@ const NewApp = () => {
         setBranches([]);
 
         try {
+            const token = localStorage.getItem('token');
+
             // Validate repo
             const validateResponse = await fetch(`${API_URL}/api/github/validate`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({ repoURL })
             });
 
@@ -74,7 +79,10 @@ const NewApp = () => {
             // Fetch branches
             const branchesResponse = await fetch(`${API_URL}/api/github/branches`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({ repoURL })
             });
 
@@ -103,10 +111,13 @@ const NewApp = () => {
         setSuccess(false);
 
         try {
+            const token = localStorage.getItem('token');
+
             const response = await fetch(`${API_URL}/api/newApp`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     projectName,

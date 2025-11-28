@@ -30,11 +30,11 @@ const Users = () => {
                 const data = await response.json();
                 setUsers(data.users);
             } else {
-                toast.error('Failed to fetch users');
+                toast.error('Kullanıcılar yüklenemedi');
             }
         } catch (error) {
             console.error('Error fetching users:', error);
-            toast.error('Network error');
+            toast.error('Ağ hatası');
         } finally {
             setLoading(false);
         }
@@ -56,21 +56,21 @@ const Users = () => {
             const data = await response.json();
 
             if (response.ok) {
-                toast.success('User created successfully');
+                toast.success('Kullanıcı başarıyla oluşturuldu');
                 setShowModal(false);
                 setFormData({ username: '', password: '', role: 'user' });
                 fetchUsers();
             } else {
-                toast.error(data.message || 'Failed to create user');
+                toast.error(data.message || 'Kullanıcı oluşturulamadı');
             }
         } catch (error) {
             console.error('Error creating user:', error);
-            toast.error('Network error');
+            toast.error('Ağ hatası');
         }
     };
 
     const handleDeleteUser = async (userId) => {
-        if (!confirm('Are you sure you want to delete this user?')) {
+        if (!confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz?')) {
             return;
         }
 
@@ -83,28 +83,28 @@ const Users = () => {
             });
 
             if (response.ok) {
-                toast.success('User deleted successfully');
+                toast.success('Kullanıcı başarıyla silindi');
                 fetchUsers();
             } else {
                 const data = await response.json();
-                toast.error(data.message || 'Failed to delete user');
+                toast.error(data.message || 'Kullanıcı silinemedi');
             }
         } catch (error) {
             console.error('Error deleting user:', error);
-            toast.error('Network error');
+            toast.error('Ağ hatası');
         }
     };
 
     if (loading) {
-        return <div className={styles.loading}>Loading users...</div>;
+        return <div className={styles.loading}>Kullanıcılar yükleniyor...</div>;
     }
 
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <h1 className={styles.title}>User Management</h1>
+                <h1 className={styles.title}>Kullanıcı Yönetimi</h1>
                 <button className={styles.createButton} onClick={() => setShowModal(true)}>
-                    + Create User
+                    + Kullanıcı Oluştur
                 </button>
             </div>
 
@@ -114,18 +114,18 @@ const Users = () => {
                         <div className={styles.userInfo}>
                             <h3 className={styles.username}>{user.username}</h3>
                             <span className={`${styles.badge} ${styles[user.role]}`}>
-                                {user.role}
+                                {user.role === 'superuser' ? 'Süper Kullanıcı' : 'Kullanıcı'}
                             </span>
                         </div>
                         <div className={styles.userMeta}>
-                            <p>Created: {new Date(user.created_at).toLocaleDateString()}</p>
+                            <p>Oluşturulma: {new Date(user.created_at).toLocaleDateString('tr-TR')}</p>
                         </div>
                         <div className={styles.actions}>
                             <button
                                 className={styles.deleteButton}
                                 onClick={() => handleDeleteUser(user.id)}
                             >
-                                Delete
+                                Sil
                             </button>
                         </div>
                     </div>
@@ -135,10 +135,10 @@ const Users = () => {
             {showModal && (
                 <div className={styles.modal} onClick={() => setShowModal(false)}>
                     <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                        <h2 className={styles.modalTitle}>Create New User</h2>
+                        <h2 className={styles.modalTitle}>Yeni Kullanıcı Oluştur</h2>
                         <form onSubmit={handleCreateUser}>
                             <div className={styles.formGroup}>
-                                <label className={styles.label}>Username</label>
+                                <label className={styles.label}>Kullanıcı Adı</label>
                                 <input
                                     type="text"
                                     className={styles.input}
@@ -150,7 +150,7 @@ const Users = () => {
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label className={styles.label}>Password</label>
+                                <label className={styles.label}>Parola</label>
                                 <input
                                     type="password"
                                     className={styles.input}
@@ -161,14 +161,14 @@ const Users = () => {
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label className={styles.label}>Role</label>
+                                <label className={styles.label}>Rol</label>
                                 <select
                                     className={styles.select}
                                     value={formData.role}
                                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                                 >
-                                    <option value="user">User</option>
-                                    <option value="superuser">Superuser</option>
+                                    <option value="user">Kullanıcı</option>
+                                    <option value="superuser">Süper Kullanıcı</option>
                                 </select>
                             </div>
 
@@ -178,10 +178,10 @@ const Users = () => {
                                     className={styles.cancelButton}
                                     onClick={() => setShowModal(false)}
                                 >
-                                    Cancel
+                                    İptal
                                 </button>
                                 <button type="submit" className={styles.submitButton}>
-                                    Create User
+                                    Kullanıcı Oluştur
                                 </button>
                             </div>
                         </form>

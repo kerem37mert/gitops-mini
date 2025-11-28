@@ -20,7 +20,7 @@ const Users = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('http://localhost:5174/api/users', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -44,7 +44,7 @@ const Users = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:5174/api/users', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -75,7 +75,7 @@ const Users = () => {
         }
 
         try {
-            const response = await fetch(`http://localhost:5174/api/users/${userId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/${userId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

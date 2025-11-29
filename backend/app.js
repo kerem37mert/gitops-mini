@@ -6,6 +6,7 @@ import { synchronization } from "./api/synchronization.js";
 import { validateRepo, getBranches } from "./api/github.js";
 import { login, logout, getCurrentUser, authenticateToken, requireSuperuser } from "./api/auth.js";
 import { getAllUsers, createUser, updateUser, deleteUser, changePassword } from "./api/users.js";
+import { startAutoSync } from "./autoSyncScheduler.js";
 
 const app = express();
 
@@ -58,4 +59,7 @@ app.post("/api/github/branches", authenticateToken, async (req, res) => {
 
 app.listen(5174, () => {
   console.log('Server is running on port 5174');
+
+  // Start auto-sync scheduler
+  startAutoSync();
 });

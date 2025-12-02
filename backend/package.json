@@ -10,5 +10,20 @@
     "fs-extra": "^11.3.2",
     "jsonwebtoken": "^9.0.2",
     "simple-git": "^3.30.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "cross-env NODE_ENV=test jest",
+    "test:coverage": "cross-env NODE_ENV=test jest --coverage",
+    "test:ui": "majestic"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "babel-jest": "^30.2.0",
+    "cross-env": "^7.0.3",
+    "jest": "^30.2.0",
+    "majestic": "^1.8.1",
+    "supertest": "^6.3.3"
   }
 }

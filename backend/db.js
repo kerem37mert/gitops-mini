@@ -1,7 +1,8 @@
 import Database from "better-sqlite3";
 import bcrypt from "bcrypt";
 
-const db = new Database("gitopsmini.db");
+const dbPath = process.env.DB_PATH || "gitopsmini.db";
+const db = new Database(dbPath);
 
 db.prepare(`
   CREATE TABLE IF NOT EXISTS apps (
